@@ -1,25 +1,26 @@
-import asyncio
 import os
-import cv2
 import re
 import threading
 import datetime 
 import subprocess
 import sys
+import asyncio
 from flask import Flask
 from telethon import TelegramClient, errors
 from telethon.tl.types import DocumentAttributeVideo
 from tqdm import tqdm
+import cv2
 
-# --- FLASK HEARTBEAT ---
+# --- FLASK HEARTBEAT (Back4app Port Check) ---
 app = Flask(__name__)
 
 @app.route('/')
 def health_check():
-    return "Bot is Running"
+    return "Telegram Cloner is running!", 200
 
 def run_flask():
-    app.run(host="0.0.0.0", port=7860)
+    port = int(os.environ.get("PORT", 8080))
+    app.run(host="0.0.0.0", port=port)
 
 # --- CONFIGURATION ---
 api_id = 30658177
@@ -220,10 +221,12 @@ async def main(client):
     await client.disconnect()
 
 if __name__ == "__main__":
+    # Start Flask background thread for Back4app health checks
     t = threading.Thread(target=run_flask)
     t.daemon = True
     t.start()
     
+    # Start Telegram client loop
     client = TelegramClient('cloner_session', api_id, api_hash)
     with client:
         client.loop.run_until_complete(main(client))
