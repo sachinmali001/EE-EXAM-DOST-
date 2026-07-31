@@ -3,3 +3,11 @@ opencv-python-headless
 tqdm
 flask
 cryptg
+telethon==1.44.0
+opencv-python-headless==5.0.0.93
+tqdm==4.70.0
+cryptg==0.5.2
+pyaes==1.6.1
+pyasn1==0.6.4
+rsa==4.9.1
+flask==3.1.3
